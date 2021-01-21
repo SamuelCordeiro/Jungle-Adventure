@@ -19,6 +19,11 @@ public class Player : MonoBehaviour
     private Rigidbody2D playerRigidbody;
     private Animator playerAnimator;
     private SpriteRenderer playerSpriteRenderer;
+
+    public bool leftArrowButton;
+    public bool rightArrowButton;
+    public bool jumpButton;
+    public bool atkButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +53,7 @@ public class Player : MonoBehaviour
 
     private void movement()
     {
-        if(Input.GetKey(KeyCode.D))
+        if(Input.GetKey(KeyCode.D) || rightArrowButton)
         {
             playerRigidbody.velocity = new Vector2(speed * Time.deltaTime, playerRigidbody.velocity.y);
             playerAnimator.SetBool("isWalking", true);
@@ -59,7 +64,7 @@ public class Player : MonoBehaviour
             playerRigidbody.velocity = new Vector2(0f, playerRigidbody.velocity.y);
             playerAnimator.SetBool("isWalking", false);
         }
-        if(Input.GetKey(KeyCode.A))
+        if(Input.GetKey(KeyCode.A) || leftArrowButton)
         {
             playerRigidbody.velocity = new Vector2(-speed * Time.deltaTime, playerRigidbody.velocity.y);
             playerAnimator.SetBool("isWalking", true);
@@ -69,7 +74,7 @@ public class Player : MonoBehaviour
 
     private void jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) && !isJumping)
+        if(Input.GetKeyDown(KeyCode.Space) || jumpButton && !isJumping)
         {
             playerRigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             isJumping = true;
@@ -79,7 +84,7 @@ public class Player : MonoBehaviour
 
     private void atk()
     {
-        if(Input.GetKeyDown(KeyCode.E) && !isAtk)
+        if(Input.GetKeyDown(KeyCode.E) || atkButton && !isAtk)
         {
             playerAnimator.SetBool("isAtk", true);
             isAtk = true;
@@ -129,4 +134,26 @@ public class Player : MonoBehaviour
         playerSpriteRenderer.enabled = true;
         weapon.GetComponent<SpriteRenderer>().enabled = true;
     }
+
+    public void MobileButtons(int key)
+    {
+        switch (key)
+        {
+            case 0:
+                leftArrowButton = !leftArrowButton;
+                break;
+            case 1:
+                rightArrowButton = !rightArrowButton;
+                break;
+            case 2:
+                jumpButton = !jumpButton;
+                break;
+            case 3:
+                atkButton = !atkButton;
+                break;
+            default:
+                break;
+        }
+    }
+    
 }
