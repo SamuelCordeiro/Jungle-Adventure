@@ -6,6 +6,8 @@ TagManager:
   tags:
   - PointAtk
   - GameOver
+  - Spider
+  - Wolf
   layers:
   - Default
   - TransparentFX
