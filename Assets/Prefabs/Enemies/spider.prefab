@@ -61,6 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c92357f5d866664fad3a3ccfbba7313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 2150053628068710913}
 --- !u!50 &1772060048
 Rigidbody2D:
   serializedVersion: 4
@@ -97,7 +98,7 @@ GameObject:
   - component: {fileID: 4439386081292964251}
   m_Layer: 0
   m_Name: spider
-  m_TagString: Untagged
+  m_TagString: Spider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
