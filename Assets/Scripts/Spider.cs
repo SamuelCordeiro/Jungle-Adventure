@@ -72,7 +72,6 @@ public class Spider : MonoBehaviour
             if(life > 0)
             {
                 spiderAnimator.SetTrigger("hit");
-                //gameObject.transform.Translate(-Vector2.right * 2f);
                 life--;
             }
         }
