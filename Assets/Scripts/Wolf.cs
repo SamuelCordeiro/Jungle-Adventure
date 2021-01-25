@@ -31,10 +31,10 @@ public class Wolf : MonoBehaviour
         if(direction)
         {
             transform.eulerAngles = new Vector2(0,0);
-            if(xDistance > 1.5 && xDistance < 7 && yDistance > - 0.5f && yDistance < 0.5f)
+            if(xDistance > 1 && xDistance < 7 && yDistance > - 0.5f && yDistance < 0.5f)
             {
                 wolfAnimator.SetBool("isPlayerNearby", true);
-                speed = 4f;
+                speed = 4.5f;
             }
             else
             {
@@ -45,10 +45,10 @@ public class Wolf : MonoBehaviour
         else
         {
             transform.eulerAngles = new Vector2(0,180);
-            if(xDistance < 1.5 && xDistance > -7 && yDistance > - 0.5f && yDistance < 0.5f)
+            if(xDistance < 1 && xDistance > -7 && yDistance > - 0.5f && yDistance < 0.5f)
             {
                 wolfAnimator.SetBool("isPlayerNearby", true);
-                speed = 4f;
+                speed = 4.5f;
             }
             else
             {
@@ -62,16 +62,6 @@ public class Wolf : MonoBehaviour
     public void Direction()
     {
         direction = !direction;
-    }
-
-    private void WolfDie()
-    {
-        if(life <= 0)
-        {
-            speed = 0;
-            wolfAnimator.SetTrigger("finalHit");
-            Destroy(gameObject, 0.4f);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider) 
@@ -90,11 +80,17 @@ public class Wolf : MonoBehaviour
 
         if (collider.gameObject.tag == "PointAtk")
         {
-            if(life > 0)
+            if(life >= 0)
             {
                 wolfAnimator.SetTrigger("hit");
                 life--;
-                WolfDie();
+            }
+            else
+            {
+                gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                speed = 0;
+                wolfAnimator.SetTrigger("finalHit");
+                Destroy(gameObject, 0.4f);
             }
         }
     }
