@@ -21,7 +21,7 @@ public class Coin : MonoBehaviour
     {
         if(collider.gameObject.tag == "Player")
         {
-            GameController.current.AddScore(10);
+            GameController.current.AddScore(5);
             Destroy(gameObject);
         }
     }
