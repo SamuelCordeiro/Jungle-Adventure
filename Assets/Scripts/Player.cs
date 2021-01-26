@@ -20,6 +20,12 @@ public class Player : MonoBehaviour
     private Animator playerAnimator;
     private SpriteRenderer playerSpriteRenderer;
 
+    public float angleCapsule;
+    public bool isGrounded;
+    public Transform feetPosition;
+    public Vector2 sizeCapsule;
+    public LayerMask whatIsGround;
+
     public bool leftArrowButton;
     public bool rightArrowButton;
     public bool jumpButton;
@@ -30,6 +36,16 @@ public class Player : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        sizeCapsule = new Vector2(0.11f, 0.002f);
+    }
+
+    void Update() 
+    {
+        isGrounded = Physics2D.OverlapCapsule(feetPosition.position, sizeCapsule, CapsuleDirection2D.Horizontal, angleCapsule, whatIsGround);
+        if(isGrounded)
+        {
+            playerAnimator.SetBool("isJumping", false);
+        }
     }
 
     // Update is called once per frame
@@ -74,10 +90,10 @@ public class Player : MonoBehaviour
 
     private void jump()
     {
-        if(Input.GetKeyDown(KeyCode.Space) || jumpButton && !isJumping)
+        if(Input.GetKeyDown(KeyCode.Space) || jumpButton )//&& !isJumping)
         {
-            playerRigidbody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            isJumping = true;
+            playerRigidbody.velocity = Vector2.up * jumpForce;
+            //isJumping = true;
             playerAnimator.SetBool("isJumping", true);
         }
     }
@@ -98,11 +114,11 @@ public class Player : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision) 
     {
-        if(collision.gameObject.layer == 8)
-        {
-            isJumping = false;
-            playerAnimator.SetBool("isJumping", false);
-        } 
+        // if(collision.gameObject.layer == 8)
+        // {
+        //     isJumping = false;
+        //     playerAnimator.SetBool("isJumping", false);
+        // } 
     }
 
     private void OnTriggerEnter2D(Collider2D collider) 
@@ -111,6 +127,10 @@ public class Player : MonoBehaviour
         {
             GameController.current.gameOverPanel.SetActive(true);
             Destroy(gameObject);
+        }
+        if(collider.gameObject.tag == "Spikes")
+        {
+            GameController.current.RemoveLife(1);
         }
     }
 
