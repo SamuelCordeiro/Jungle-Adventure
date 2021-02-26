@@ -13936,5 +13936,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Treant
       objectReference: {fileID: 0}
+    - target: {fileID: 5644681276113939205, guid: e7349447d3286b545aed5ec7c42c06d5,
+        type: 3}
+      propertyPath: canWalk
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e7349447d3286b545aed5ec7c42c06d5, type: 3}
