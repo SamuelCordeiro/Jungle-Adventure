@@ -9,6 +9,7 @@ TagManager:
   - Spider
   - Wolf
   - Spikes
+  - Treant
   layers:
   - Default
   - TransparentFX
