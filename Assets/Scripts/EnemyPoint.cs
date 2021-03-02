@@ -7,6 +7,17 @@ public class EnemyPoint : MonoBehaviour
     [SerializeField]
     private GameObject enemy;
 
+    private void OnTriggerStay2D(Collider2D collider) 
+    {
+        if(collider.gameObject.layer == 8)
+        {
+            if(enemy.tag == "Treant")
+            {
+                gameObject.GetComponentInParent<Treant>().MovementController(false);
+            }
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collider) 
     {
         if(collider.gameObject.layer == 8)
@@ -21,10 +32,12 @@ public class EnemyPoint : MonoBehaviour
                     break;
                 case "Scorpion":
                     break;
+                case "Treant":
+                    gameObject.GetComponentInParent<Treant>().MovementController(true);
+                    break;
                 default:
                     break;
             }
-            //gameObject.GetComponentInParent<Spider>().Direction();
         }
     }
 }
