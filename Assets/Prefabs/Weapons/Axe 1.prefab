@@ -82,7 +82,7 @@ GameObject:
   - component: {fileID: 3055971644925629410}
   - component: {fileID: 3055971644925629408}
   m_Layer: 0
-  m_Name: Axe
+  m_Name: Axe 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,7 +97,7 @@ Transform:
   m_GameObject: {fileID: 3055971644925629212}
   m_LocalRotation: {x: 0.006553059, y: -0.04506392, z: -0.0068059694, w: 0.99893945}
   m_LocalPosition: {x: -6.847703, y: -2.22005, z: 0.010016642}
-  m_LocalScale: {x: 1.0484978, y: 1.0484978, z: 1.0484978}
+  m_LocalScale: {x: 5.393365, y: 5.393365, z: 5.393365}
   m_Children:
   - {fileID: 3055971644827693281}
   m_Father: {fileID: 0}
