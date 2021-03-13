@@ -28,7 +28,7 @@ public class EnemyPoint : MonoBehaviour
                     gameObject.GetComponentInParent<Spider>().Direction();
                     break;
                 case "Wolf":
-                    gameObject.GetComponentInParent<Wolf>().Direction();
+                    //gameObject.GetComponentInParent<Wolf>().Direction();
                     break;
                 case "Scorpion":
                     break;
