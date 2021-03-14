@@ -5,9 +5,10 @@ using UnityEngine;
 public class Wolf : MonoBehaviour
 {
     private int life;
-    [SerializeField]
-    private float speed;
-    private bool direction;
+    [SerializeField] private float speed;
+    [SerializeField] private float limitL;
+    [SerializeField] private float limitRigth;
+    [SerializeField] private bool direction;
     private GameObject player;
     private Animator wolfAnimator;
     // Start is called before the first frame update
@@ -22,46 +23,59 @@ public class Wolf : MonoBehaviour
     void Update()
     {
         Movement();
+        //Direction();
+        if(transform.position.x - limitL <= 0)
+        {
+            Debug.Log("!");
+            direction = false;
+        }
+        // if(transform.position.x > limitRigth)
+        // {
+        //     direction = false;
+        // }
     }
 
     private void Movement()
     {
-        float xDistance = player.transform.position.x - transform.position.x;
-        float yDistance = player.transform.position.y - transform.position.y;
-        if(direction)
+        if(player != null && life > 0)
         {
-            transform.eulerAngles = new Vector2(0,0);
-            if(xDistance > 1 && xDistance < 7 && yDistance > - 0.5f && yDistance < 0.5f)
+            float xDistance = player.transform.position.x - transform.position.x;
+            float yDistance = player.transform.position.y - transform.position.y;
+            if(direction)
             {
-                wolfAnimator.SetBool("isPlayerNearby", true);
-                speed = 4.5f;
+                transform.eulerAngles = new Vector2(0,0);
+                if(xDistance > 1 && xDistance < 7 && yDistance > - 0.5f && yDistance < 0.5f)
+                {
+                    wolfAnimator.SetBool("isPlayerNearby", true);
+                    speed = 4.5f;
+                }
+                else
+                {
+                    wolfAnimator.SetBool("isPlayerNearby", false);
+                    speed = 3f;
+                }
             }
             else
             {
-                wolfAnimator.SetBool("isPlayerNearby", false);
-                speed = 3f;
-            }
-        }
-        else
-        {
-            transform.eulerAngles = new Vector2(0,180);
-            if(xDistance < 1 && xDistance > -7 && yDistance > - 0.5f && yDistance < 0.5f)
-            {
-                wolfAnimator.SetBool("isPlayerNearby", true);
-                speed = 4.5f;
-            }
-            else
-            {
-                wolfAnimator.SetBool("isPlayerNearby", false);
-                speed = 3f;
+                transform.eulerAngles = new Vector2(0,180);
+                if(xDistance < 1 && xDistance > -7 && yDistance > - 0.5f && yDistance < 0.5f)
+                {
+                    wolfAnimator.SetBool("isPlayerNearby", true);
+                    speed = 4.5f;
+                }
+                else
+                {
+                    wolfAnimator.SetBool("isPlayerNearby", false);
+                    speed = 3f;
+                }
             }
         }
         transform.Translate(Vector2.right * speed * Time.deltaTime);
     }
     
-    public void Direction()
+    private void Direction()
     {
-        direction = !direction;
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collider) 
@@ -87,8 +101,8 @@ public class Wolf : MonoBehaviour
             }
             else
             {
-                gameObject.GetComponent<PolygonCollider2D>().enabled = false;
                 speed = 0;
+                gameObject.GetComponent<PolygonCollider2D>().enabled = false;
                 wolfAnimator.SetTrigger("finalHit");
                 Destroy(gameObject, 0.4f);
             }
