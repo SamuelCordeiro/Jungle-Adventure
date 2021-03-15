@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Treant : MonoBehaviour
 {
-    private int life;
+    [SerializeField] private int life;
     [SerializeField] private float speed;
     [SerializeField] private bool canWalk;
     [SerializeField] private float immobileTime;
-    [SerializeField] private string direction;
-    private bool hit;
     [SerializeField] private bool isPlatformOver;
     [SerializeField] private float xDistance;
+    private bool hit;
     private GameObject player;
     private Animator treantAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
+        canWalk = true;
         life = 5;
         player = GameObject.FindGameObjectWithTag("Player");
         treantAnimator = GetComponent<Animator>();
@@ -28,8 +28,6 @@ public class Treant : MonoBehaviour
     {
         Movement();
         ChangeDirection();
-        Hit();
-        calculateImmobileTime();
     }
 
     void Movement()
@@ -54,15 +52,13 @@ public class Treant : MonoBehaviour
 
     void ChangeDirection()
     {
-        if(xDistance > 1)
+        if(xDistance > 2)
         {
             transform.eulerAngles = new Vector2(0,0);
-            direction = "rigth";
         }
-        else if(xDistance < 1)
+        else if(xDistance < -2)
         {
             transform.eulerAngles = new Vector2(0,180);
-            direction = "left";
         }
     }
 
@@ -70,39 +66,55 @@ public class Treant : MonoBehaviour
     {
         isPlatformOver = value;
     }
-    
-    void calculateImmobileTime()
+
+    private IEnumerator Hit()
     {
-        immobileTime -= Time.deltaTime;
-        if(immobileTime <= 0)
-        {
-            canWalk = true;
-        } 
-        if(immobileTime >= 0)
-        {
-            canWalk = false;
-        }
-    }
-    void Hit()
-    {
-        if(hit)
-        {
-            Debug.Log("2");
-            transform.Translate(Vector2.right * -100f * Time.deltaTime);
-            hit = false;
-            immobileTime = 0.8f;
-        }
+        transform.Translate(Vector2.right * -100f * Time.deltaTime);
+        treantAnimator.SetBool("canWalk", false);
+        canWalk = false;
+        yield return new WaitForSeconds(0.8f);
+        treantAnimator.SetBool("canWalk", true);
+        canWalk = true;
     }
     private void OnTriggerEnter2D(Collider2D collider) 
     {
+        if (collider.gameObject.tag == "Player")
+        {
+            treantAnimator.SetTrigger("atk");
+            if(!collider.gameObject.GetComponent<Player>().isVisible)
+            {
+                collider.gameObject.transform.Translate(-Vector2.right * 0.5f);
+                GameController.current.RemoveLife(1);
+                StartCoroutine(collider.gameObject.GetComponent<Player>().PlayerDamage(0.15f));
+                collider.gameObject.GetComponent<Player>().isVisible = true;
+            }
+        }
+
         if (collider.gameObject.tag == "PointAtk")
         {
-            if(life > 0)
+            treantAnimator.SetTrigger("hit");
+            StartCoroutine(Hit());
+            life--;
+            if(life <= 0)
             {
-                treantAnimator.SetTrigger("hit");
-                hit = true;
-                life--;
+                treantAnimator.SetTrigger("finalHit");
+                gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+                speed = 0;
+                Destroy(gameObject, 1.2f);
             }
+            // if(life >= 0)
+            // {
+            //     treantAnimator.SetTrigger("hit");
+            //     StartCoroutine(Hit());
+            //     life--;
+            // }
+            // else
+            // {
+            //     treantAnimator.SetTrigger("finalHit");
+            //     gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+            //     speed = 0;
+            //     Destroy(gameObject, 0.4f);
+            // }
         }        
     }
 }
