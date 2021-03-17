@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject feet;
-    [SerializeField]
-    private float speed;
-    [SerializeField]
-    private float jumpForce;
+    [SerializeField] private GameObject feet;
+    [SerializeField] private float speed;
+    [SerializeField] private GameObject objPrefab;
+    [SerializeField] private float jumpForce;
     private bool isJumping;
     public bool isAtk;
     public bool isVisible;
@@ -34,6 +32,9 @@ public class Player : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody2D>();
         playerAnimator = GetComponent<Animator>();
         playerSpriteRenderer = GetComponent<SpriteRenderer>();
+        
+        weapon = Instantiate(objPrefab, weaponPoint.transform.position, weaponPoint.transform.rotation);
+        weapon.transform.SetParent(weaponPoint.transform);
     }
 
     void Update() 
