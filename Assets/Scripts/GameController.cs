@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
     public int playerLives;
     public Transform lives;
     public bool isPaused;
+    private int gameLevel;
     public GameObject pauseMenu;
     public GameObject menuBG;
     public GameObject shop;
@@ -21,6 +22,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameLevel = 1;
         current = this;
         AddLife(3);
     }
@@ -80,9 +82,15 @@ public class GameController : MonoBehaviour
         shop.SetActive(false);
     }
 
+    public void NextLevel()
+    {
+        gameLevel ++;
+        SceneManager.LoadScene(gameLevel);
+    }
+
     public void RestartGame()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(gameLevel);
     }
 
     public void ExitGame()
