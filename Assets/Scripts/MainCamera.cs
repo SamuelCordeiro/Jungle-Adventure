@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class MainCamera : MonoBehaviour
 {
-    [SerializeField]
-    private float speed;
+    [SerializeField] private float speed;
+    [SerializeField] private float limitLeft;
+    [SerializeField] private float limitRigth;
     private GameObject player;
     // Start is called before the first frame update
     void Start()
@@ -18,8 +19,11 @@ public class MainCamera : MonoBehaviour
     {
         if(player != null)
         {
-            Vector3 newPos = new Vector3(player.transform.position.x + 2f, transform.position.y, transform.position.z);
-            transform.position = Vector3.Lerp(transform.position, newPos, speed * Time.deltaTime);
+            if(player.transform.position.x > limitLeft && player.transform.position.x < limitRigth)
+            {
+                Vector3 newPos = new Vector3(player.transform.position.x + 2f, transform.position.y, transform.position.z);
+                transform.position = Vector3.Lerp(transform.position, newPos, speed * Time.deltaTime);
+            }
         }
     }
 }
