@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class EnemyPoint : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject enemy;
+    [SerializeField] private GameObject enemy;
+    public bool offThePlatform;
 
     private void OnTriggerStay2D(Collider2D collider) 
     {
@@ -25,7 +25,7 @@ public class EnemyPoint : MonoBehaviour
             switch (enemy.tag)
             {
                 case "Spider":
-                    gameObject.GetComponentInParent<Spider>().Direction();
+                    //gameObject.GetComponentInParent<Spider>().Direction();
                     break;
                 case "Wolf":
                     //gameObject.GetComponentInParent<Wolf>().Direction();
