@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class Wolf : MonoBehaviour
 {
-    private int life;
+    [SerializeField] private int life;
     [SerializeField] private float speed;
-    [SerializeField] private float limitL;
+    [SerializeField] private float limitLeft;
     [SerializeField] private float limitRigth;
     [SerializeField] private bool direction;
+    [SerializeField] private bool debug;
     private GameObject player;
     private Animator wolfAnimator;
+    
     // Start is called before the first frame update
     void Start()
     {
         life = 3;
+        speed = 0;
         player = GameObject.FindGameObjectWithTag("Player");
         wolfAnimator = GetComponent<Animator>();
     }
@@ -23,16 +26,11 @@ public class Wolf : MonoBehaviour
     void Update()
     {
         Movement();
-        //Direction();
-        if(transform.position.x - limitL <= 0)
+        Direction();
+        if(debug)
         {
-            Debug.Log("!");
-            direction = false;
+            Debug.Log(transform.position.x);
         }
-        // if(transform.position.x > limitRigth)
-        // {
-        //     direction = false;
-        // }
     }
 
     private void Movement()
@@ -73,9 +71,16 @@ public class Wolf : MonoBehaviour
         transform.Translate(Vector2.right * speed * Time.deltaTime);
     }
     
-    private void Direction()
+    public void Direction()
     {
-        
+        if(transform.position.x < limitLeft)
+        {
+            direction = true;
+        }
+        if(transform.position.x > limitRigth)
+        {
+            direction = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider) 
@@ -94,7 +99,7 @@ public class Wolf : MonoBehaviour
 
         if (collider.gameObject.tag == "PointAtk")
         {
-            if(life >= 0)
+            if(life > 1)
             {
                 wolfAnimator.SetTrigger("hit");
                 life--;
@@ -103,8 +108,8 @@ public class Wolf : MonoBehaviour
             {
                 speed = 0;
                 gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                Destroy(gameObject, 0.5f);
                 wolfAnimator.SetTrigger("finalHit");
-                Destroy(gameObject, 0.4f);
             }
         }
     }
