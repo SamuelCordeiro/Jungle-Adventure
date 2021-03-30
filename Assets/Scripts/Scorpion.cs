@@ -4,18 +4,17 @@ using UnityEngine;
 
 public class Scorpion : MonoBehaviour
 {
-    [SerializeField]
-    private float speed;
-    [SerializeField]
-    private bool direction;
-    [SerializeField]
-    private float durationDirection;
+    [SerializeField] private int life;
+    [SerializeField] private float speed;
+    [SerializeField] private bool direction;
+    [SerializeField] private float durationDirection;
     private float timeDirection;
-    private Animator scorpionAnimatior;
+    private Animator scorpionAnimator;
     // Start is called before the first frame update
     void Start()
     {
-        scorpionAnimatior = GetComponent<Animator>();
+        life = 3;
+        scorpionAnimator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -26,7 +25,7 @@ public class Scorpion : MonoBehaviour
 
     private void movement()
     {
-        if(direction)
+        if(direction && life > 0)
         {
             transform.eulerAngles = new Vector2(0,0);
         }
@@ -37,6 +36,7 @@ public class Scorpion : MonoBehaviour
 
         transform.Translate(Vector2.right * speed * Time.deltaTime);
         timeDirection += Time.deltaTime;
+        
         if (timeDirection >= durationDirection)
         {
             timeDirection = 0;
@@ -48,7 +48,7 @@ public class Scorpion : MonoBehaviour
     {
         if (collider.gameObject.tag == "Player")
         {
-            scorpionAnimatior.SetTrigger("atk");
+            scorpionAnimator.SetTrigger("atk");
             if(!collider.gameObject.GetComponent<Player>().isVisible)
             {
                 collider.gameObject.transform.Translate(-Vector2.right * 0.5f);
@@ -60,9 +60,18 @@ public class Scorpion : MonoBehaviour
 
         if (collider.gameObject.tag == "PointAtk")
         {
-            speed = 0;
-            scorpionAnimatior.SetTrigger("hit");
-            Destroy(gameObject, 0.4f);
+            if(life > 1)
+            {
+                scorpionAnimator.SetTrigger("hit");
+                life--;
+            }
+            else
+            {
+                speed = 0;
+                gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                Destroy(gameObject, 0.4f);
+                scorpionAnimator.SetTrigger("finalHit");
+            }
         }
     }
 }
