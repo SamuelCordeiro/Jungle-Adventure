@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Spider : MonoBehaviour
 {
-    [SerializeField]
-    private int life;
-    [SerializeField]
-    private float speed;
-    [SerializeField]
-    private bool direction;
+    [SerializeField] private int life;
+    [SerializeField] private float speed;
+    [SerializeField] private bool direction;
+    [SerializeField] private float durationDirection;
+    private float timeDirection;
     private Animator spiderAnimator;
     // Start is called before the first frame update
     void Start()
@@ -22,7 +21,6 @@ public class Spider : MonoBehaviour
     void Update()
     {
         Movement();
-        SpiderDie();
     }
 
     private void Movement()
@@ -35,22 +33,20 @@ public class Spider : MonoBehaviour
         {
             transform.eulerAngles = new Vector2(0,180);
         }
+
         transform.Translate(Vector2.right * speed * Time.deltaTime);
+        timeDirection += Time.deltaTime;
+        
+        if (timeDirection >= durationDirection)
+        {
+            timeDirection = 0;
+            direction = !direction;
+        }
     }
 
     public void Direction()
     {
         direction = !direction;
-    }
-    
-    private void SpiderDie()
-    {
-        if(life <= 0)
-        {
-            speed = 0;
-            spiderAnimator.SetTrigger("finalHit");
-            Destroy(gameObject, 0.4f);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider) 
@@ -69,10 +65,17 @@ public class Spider : MonoBehaviour
 
         if (collider.gameObject.tag == "PointAtk")
         {
-            if(life > 0)
-            {
+            if(life > 1)
+            {                
                 spiderAnimator.SetTrigger("hit");
                 life--;
+            }
+            else
+            {
+                speed = 0;
+                gameObject.GetComponent<PolygonCollider2D>().enabled = false;
+                Destroy(gameObject, 0.5f);
+                spiderAnimator.SetTrigger("finalHit");
             }
         }
     }
